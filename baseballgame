@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1931年第17回夏季甲子園</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
@@ -14,10 +12,12 @@
         }
 
         body {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'Hiragino Sans GB', 'Noto Sans CJK TC', 'Source Han Sans TC', 'WenQuanYi Micro Hei', sans-serif;
             background: 
                 linear-gradient(rgba(101, 67, 33, 0.8), rgba(139, 69, 19, 0.9)),
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23654321"/><circle cx="50" cy="50" r="30" fill="none" stroke="%23D2691E" stroke-width="2" opacity="0.3"/></svg>');
+                radial-gradient(circle at 30% 70%, rgba(210, 105, 30, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(160, 82, 45, 0.2) 0%, transparent 50%),
+                #654321;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -341,7 +341,7 @@
             border-radius: 30px;
             font-size: 1.3em;
             font-weight: 700;
-            font-family: 'Noto Serif TC', serif;
+            font-family: inherit;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             box-shadow: 
@@ -398,6 +398,41 @@
             border-radius: 10px;
             font-weight: 700;
             border: 2px solid #654321;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .baseball-field {
+                width: 320px;
+                height: 280px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+            }
+            
+            .scoreboard {
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .score-value {
+                font-size: 2em;
+            }
+            
+            .result {
+                font-size: 1.5em;
+            }
         }
     </style>
 </head>
@@ -456,10 +491,8 @@
         (function() {
             'use strict';
             
-            // 防止全域污染的立即執行函數
             let gameEnded = false;
 
-            // 出局結果配置
             const outTypes = [
                 { text: '😞 三振出局...', animation: '' },
                 { text: '😔 飛球被接殺...', animation: 'hit-fly' },
@@ -527,7 +560,6 @@
                     gameStats: safeGetElement('gameStats')
                 };
                 
-                // 驗證所有必要元素
                 const requiredElements = ['pitcher', 'batter', 'gameBall', 'result', 'swingBtn'];
                 for (let key of requiredElements) {
                     if (!elements[key]) {
@@ -535,28 +567,22 @@
                     }
                 }
                 
-                // 禁用按鈕
                 elements.swingBtn.disabled = true;
                 elements.swingBtn.style.opacity = '0.5';
                 
-                // 開始投球動畫
                 safeAddClass(elements.pitcher, 'throwing');
                 safeAddClass(elements.gameBall, 'pitching');
                 
-                // 投球完成後開始打擊判定
                 setTimeout(function() {
                     safeAddClass(elements.batter, 'swinging');
                     
-                    // 必定出局的結果
                     gameEnded = true;
                     
                     const selectedOut = outTypes[Math.floor(Math.random() * outTypes.length)];
                     
-                    // 球的打擊後動畫
                     if (selectedOut.animation) {
                         elements.gameBall.className = 'game-ball ' + selectedOut.animation;
                     } else {
-                        // 三振的情況，球停留不動
                         if (elements.gameBall.style) {
                             elements.gameBall.style.opacity = '1';
                         }
@@ -565,7 +591,6 @@
                     safeSetContent(elements.result, selectedOut.text);
                     elements.result.className = 'result miss';
                     
-                    // 遊戲結束訊息
                     setTimeout(function() {
                         const endMessage = `
                             <div style="font-size: 1.2em; color: #8B0000; margin-bottom: 10px;">
@@ -578,7 +603,6 @@
                         `;
                         safeSetContent(elements.result, endMessage);
                         
-                        // 顯示統計區域作為結束語
                         if (elements.gameStats) {
                             elements.gameStats.style.display = 'block';
                             const statsMessage = `
@@ -594,12 +618,10 @@
                     
                 }, 600);
                 
-                // 重置動畫
                 setTimeout(function() {
                     safeRemoveClass(elements.pitcher, 'throwing');
                     safeRemoveClass(elements.batter, 'swinging');
                     
-                    // 檢查三振情況
                     const currentOut = outTypes[Math.floor(Math.random() * outTypes.length)];
                     if (!currentOut.animation) {
                         elements.gameBall.className = 'game-ball';
@@ -612,10 +634,8 @@
                 return true;
             }
 
-            // 將函數綁定到全域，供HTML使用
             window.finalSwing = finalSwing;
 
-            // 鍵盤控制
             document.addEventListener('keydown', function(event) {
                 if (event && event.code === 'Space' && !gameEnded) {
                     try {
@@ -627,10 +647,9 @@
                 }
             });
 
-            // DOM 載入完成檢查
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', function() {
-                    // DOM 已載入，無需執行額外操作
+                    // DOM 已載入完成
                 });
             }
         })();
