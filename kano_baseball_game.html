@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="重現1931年嘉義農林學校在甲子園的歷史時刻 - 九局上半，兩出局，滿壘的緊張局面">
+    <meta name="keywords" content="嘉農, 甲子園, 1931, 棒球, 台灣, 歷史, 遊戲">
+    <meta name="author" content="GitHub Project">
+    <title>1931年第17回夏季甲子園 - 嘉農 VS 中京商業</title>
+    <style>
+        /* 1931年嘉農甲子園棒球遊戲 - GitHub專案 */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', '微軟正黑體', 'PingFang TC', 'Hiragino Sans GB', 'Noto Sans CJK TC', 'Source Han Sans TC', 'WenQuanYi Micro Hei', sans-serif;
+            background: 
+                linear-gradient(rgba(101, 67, 33, 0.8), rgba(139, 69, 19, 0.9)),
+                radial-gradient(circle at 30% 70%, rgba(210, 105, 30, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 70% 30%, rgba(160, 82, 45, 0.2) 0%, transparent 50%),
+                #654321;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: 
+                linear-gradient(145deg, #F5DEB3 0%, #DEB887 50%, #D2B48C 100%);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+            border: 4px solid #8B4513;
+            position: relative;
+        }
+
+        .game-container::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #CD853F, #A0522D, #8B4513);
+            border-radius: 23px;
+            z-index: -1;
+        }
+
+        h1 {
+            color: #8B0000;
+            font-size: 2.8em;
+            font-weight: 700;
+            text-shadow: 
+                3px 3px 0px #654321,
+                6px 6px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #654321;
+            font-size: 1.2em;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .baseball-field {
+            width: 400px;
+            height: 350px;
+            margin: 20px auto;
+            position: relative;
+            background: 
+                radial-gradient(circle at center, #228B22 0%, #32CD32 40%, #228B22 100%);
+            border-radius: 20px;
+            border: 6px solid #8B4513;
+            box-shadow: 
+                inset 0 0 50px rgba(0, 0, 0, 0.2),
+                0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: visible;
+        }
+
+        .diamond {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            width: 120px;
+            height: 120px;
+            background: #DEB887;
+            transform: translate(-50%, -50%) rotate(45deg);
+            border: 2px solid #8B4513;
+        }
+
+        .pitcher-mound {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .batter-box {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            width: 40px;
+            height: 20px;
+            background: rgba(245, 222, 179, 0.7);
+            transform: translateX(-50%);
+            border: 2px solid #8B4513;
+            border-radius: 5px;
+        }
+
+        .pitcher {
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            width: 30px;
+            height: 40px;
+            background: #4169E1;
+            border-radius: 15px 15px 5px 5px;
+            transform: translateX(-50%);
+            z-index: 3;
+            transition: transform 0.3s ease;
+        }
+
+        .pitcher.throwing {
+            animation: pitcherThrow 0.8s ease-out;
+        }
+
+        @keyframes pitcherThrow {
+            0% { transform: translateX(-50%) rotateZ(0deg); }
+            30% { transform: translateX(-50%) rotateZ(-15deg) translateY(-5px); }
+            70% { transform: translateX(-50%) rotateZ(15deg) translateY(5px); }
+            100% { transform: translateX(-50%) rotateZ(0deg); }
+        }
+
+        .batter {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            width: 25px;
+            height: 35px;
+            background: #CD853F;
+            border-radius: 12px 12px 3px 3px;
+            transform: translateX(-50%);
+            z-index: 3;
+            transition: transform 0.3s ease;
+        }
+
+        .batter::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -15px;
+            width: 3px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        .batter.swinging {
+            animation: batterSwing 0.6s ease-out;
+        }
+
+        @keyframes batterSwing {
+            0% { transform: translateX(-50%) rotateZ(0deg); }
+            50% { transform: translateX(-50%) rotateZ(-30deg); }
+            100% { transform: translateX(-50%) rotateZ(0deg); }
+        }
+
+        .game-ball {
+            width: 35px;
+            height: 35px;
+            background: #FFFFFF;
+            border-radius: 50%;
+            position: absolute;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 
+                0 3px 10px rgba(0, 0, 0, 0.4),
+                inset -3px -3px 8px rgba(0, 0, 0, 0.1);
+            z-index: 4;
+            opacity: 0;
+        }
+
+        .game-ball::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid #DC143C;
+            border-radius: 50%;
+        }
+
+        .game-ball::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 15%;
+            right: 15%;
+            height: 1px;
+            background: #DC143C;
+            transform: translateY(-50%);
+        }
+
+        .game-ball.pitching {
+            animation: ballPitch 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes ballPitch {
+            0% { 
+                opacity: 1;
+                top: 35%; 
+                left: 50%; 
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% { 
+                top: 50%; 
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+            100% { 
+                opacity: 1;
+                top: 85%; 
+                left: 50%; 
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+        }
+
+        .game-ball.hit-fly {
+            animation: ballHitFly 2s ease-out forwards;
+        }
+
+        .game-ball.hit-ground {
+            animation: ballHitGround 1.5s ease-out forwards;
+        }
+
+        @keyframes ballHitFly {
+            0% { 
+                top: 85%; 
+                left: 50%;
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            30% { 
+                top: 20%; 
+                left: 80%;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% { 
+                top: 10%; 
+                left: 120%;
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+        }
+
+        @keyframes ballHitGround {
+            0% { 
+                top: 85%; 
+                left: 50%;
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.9);
+            }
+            50% { 
+                top: 70%; 
+                left: 75%;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% { 
+                top: 80%; 
+                left: 100%;
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.7);
+            }
+        }
+
+        .scoreboard {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
+            background: 
+                linear-gradient(145deg, #2F1B14, #3D2B1F);
+            border-radius: 15px;
+            border: 3px solid #8B4513;
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.5),
+                0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-item {
+            background: rgba(245, 222, 179, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #8B4513;
+        }
+
+        .score-label {
+            color: #DEB887;
+            font-size: 1em;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .score-value {
+            color: #FFD700;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .btn {
+            background: linear-gradient(145deg, #CD853F, #A0522D);
+            color: #FFF8DC;
+            border: 3px solid #8B4513;
+            padding: 18px 35px;
+            border-radius: 30px;
+            font-size: 1.3em;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 
+                0 8px 25px rgba(139, 69, 19, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .btn:hover {
+            background: linear-gradient(145deg, #DAA520, #B8860B);
+            transform: translateY(-4px);
+            box-shadow: 
+                0 12px 35px rgba(139, 69, 19, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result {
+            margin: 25px 0;
+            font-size: 1.8em;
+            font-weight: 700;
+            min-height: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .result.miss { color: #DC143C; }
+
+        .game-stats {
+            background: 
+                linear-gradient(145deg, rgba(245, 222, 179, 0.9), rgba(222, 184, 135, 0.9));
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            border: 2px solid #D2691E;
+            box-shadow: 
+                inset 0 2px 10px rgba(255, 255, 255, 0.3),
+                0 5px 15px rgba(0, 0, 0, 0.2);
+            color: #8B4513;
+            font-weight: 700;
+        }
+
+        .inning-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(139, 69, 19, 0.8);
+            color: #F5DEB3;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: 700;
+            border: 2px solid #654321;
+        }
+
+        .github-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.05);
+        }
+
+        .info-panel {
+            background: rgba(139, 69, 19, 0.1);
+            border: 2px solid #8B4513;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #654321;
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 600px) {
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .baseball-field {
+                width: 320px;
+                height: 280px;
+            }
+            
+            h1 {
+                font-size: 2.2em;
+            }
+            
+            .btn {
+                padding: 15px 25px;
+                font-size: 1.1em;
+            }
+            
+            .scoreboard {
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .score-value {
+                font-size: 2em;
+            }
+            
+            .result {
+                font-size: 1.5em;
+            }
+            
+            .github-link {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin: 10px;
+                display: inline-block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- GitHub專案連結 -->
+    <a href="https://github.com/[your-username]/kano-koshien-game" class="github-link" target="_blank">
+        ⭐ GitHub 專案
+    </a>
+
+    <div class="game-container">
+        <div class="inning-display">九局上半</div>
+        
+        <h1>⚾ 1931年第17回<br>夏季甲子園</h1>
+        <div class="subtitle">嘉農 VS 中京商業 - 歷史關鍵時刻</div>
+        
+        <div class="info-panel">
+            <strong>🏟️ 歷史背景：</strong>1931年，台灣嘉義農林學校創造歷史，成為首支打進甲子園決賽的台灣球隊。
+            這場比賽展現了不屈的運動精神，震撼了整個日本。
+        </div>
+        
+        <div class="baseball-field">
+            <div class="diamond"></div>
+            <div class="pitcher-mound"></div>
+            <div class="batter-box"></div>
+            <div class="pitcher" id="pitcher"></div>
+            <div class="batter" id="batter"></div>
+            <div class="game-ball" id="gameBall"></div>
+        </div>
+        
+        <div class="result" id="result">
+            <div style="color: #8B0000; font-weight: bold;">
+                九局上半，兩出局，滿壘...
+            </div>
+            <div style="color: #654321; font-size: 1.2em; margin-top: 10px;">
+                這是關鍵的一球！
+            </div>
+        </div>
+
+        <div class="scoreboard">
+            <div class="score-item">
+                <div class="score-label">嘉農</div>
+                <div class="score-value">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">中京商</div>
+                <div class="score-value">4</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">出局數</div>
+                <div class="score-value">2</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="finalSwing()" id="swingBtn">🏏 揮棒打擊</button>
+        </div>
+
+        <div class="info-panel" style="font-size: 0.85em; opacity: 0.8;">
+            <strong>🎮 操作：</strong>點擊「揮棒打擊」按鈕或按空白鍵開始遊戲 | 
+            <strong>⚙️ 技術：</strong>純HTML5 + CSS3 + JavaScript，無框架依賴，完全離線運行
+        </div>
+
+        <div class="game-stats" style="display: none;" id="gameStats">
+            <div style="text-align: center;">
+                歷史上的關鍵一刻...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 1931年嘉農甲子園棒球遊戲 - JavaScript核心邏輯
+         * GitHub專案: https://github.com/[your-username]/kano-koshien-game
+         * 
+         * 特色：
+         * - 歷史準確的1931年甲子園決賽情境重現
+         * - 流暢的棒球動畫效果
+         * - 完全離線運行，無外部相依性
+         * - 響應式設計，支援桌面和行動裝置
+         */
+        (function() {
+            'use strict';
+            
+            let gameEnded = false;
+            let gameStarted = false;
+
+            // 結果配置 - 增加更多樣化的結果
+            const gameResults = [
+                // 出局結果
+                { text: '😞 三振出局...', animation: '', type: 'out', description: '捕手穩穩接住了最後一球' },
+                { text: '😔 飛球被接殺...', animation: 'hit-fly', type: 'out', description: '外野手完美接殺' },
+                { text: '💔 滾地球出局...', animation: 'hit-ground', type: 'out', description: '內野防守嚴密，無法突破' },
+                // 安打結果（偶爾會發生）
+                { text: '🔥 安打！跑者回來得分！', animation: 'hit-fly', type: 'hit', description: '漂亮的飛球越過內野！' },
+                { text: '⚡ 強勁安打穿越內野！', animation: 'hit-ground', type: 'hit', description: '球以驚人速度通過防線！' }
+            ];
+
+            // 安全的DOM元素取得
+            function safeGetElement(id) {
+                try {
+                    return document.getElementById(id);
+                } catch (e) {
+                    console.warn(`無法取得元素: ${id}`);
+                    return null;
+                }
+            }
+
+            // 安全的內容設定
+            function safeSetContent(element, content) {
+                if (element && typeof content === 'string') {
+                    try {
+                        element.innerHTML = content;
+                        return true;
+                    } catch (e) {
+                        try {
+                            element.textContent = content.replace(/<[^>]*>/g, '');
+                            return true;
+                        } catch (e2) {
+                            console.warn('內容設定失敗');
+                            return false;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // 安全的CSS類別操作
+            function safeAddClass(element, className) {
+                if (element && element.classList && typeof className === 'string') {
+                    try {
+                        element.classList.add(className);
+                        return true;
+                    } catch (e) {
+                        console.warn(`新增類別失敗: ${className}`);
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            function safeRemoveClass(element, className) {
+                if (element && element.classList && typeof className === 'string') {
+                    try {
+                        element.classList.remove(className);
+                        return true;
+                    } catch (e) {
+                        console.warn(`移除類別失敗: ${className}`);
+                        return false;
+                    }
+                }
+                return false;
+            }
+
+            // 主要遊戲邏輯 - 揮棒打擊
+            function finalSwing() {
+                if (gameEnded) return false;
+                
+                gameStarted = true;
+                
+                const elements = {
+                    pitcher: safeGetElement('pitcher'),
+                    batter: safeGetElement('batter'),
+                    gameBall: safeGetElement('gameBall'),
+                    result: safeGetElement('result'),
+                    swingBtn: safeGetElement('swingBtn'),
+                    gameStats: safeGetElement('gameStats')
+                };
+                
+                // 驗證所有必要元素
+                const requiredElements = ['pitcher', 'batter', 'gameBall', 'result', 'swingBtn'];
+                for (let key of requiredElements) {
+                    if (!elements[key]) {
+                        console.error(`關鍵元素缺失: ${key}`);
+                        return false;
+                    }
+                }
+                
+                // 禁用按鈕並更新樣式
+                elements.swingBtn.disabled = true;
+                elements.swingBtn.style.opacity = '0.5';
+                elements.swingBtn.textContent = '投球中...';
+                
+                // 開始投球動畫序列
+                safeAddClass(elements.pitcher, 'throwing');
+                safeAddClass(elements.gameBall, 'pitching');
+                
+                // 投球完成後的打擊判定
+                setTimeout(function() {
+                    safeAddClass(elements.batter, 'swinging');
+                    
+                    // 遊戲結束標記
+                    gameEnded = true;
+                    
+                    // 選擇結果（增加一些機會性，但主要還是歷史結果）
+                    let selectedResult;
+                    const chance = Math.random();
+                    if (chance < 0.15) { // 15% 機率安打
+                        selectedResult = gameResults.filter(r => r.type === 'hit')[Math.floor(Math.random() * 2)];
+                    } else { // 85% 機率出局（符合歷史）
+                        selectedResult = gameResults.filter(r => r.type === 'out')[Math.floor(Math.random() * 3)];
+                    }
+                    
+                    // 根據結果類型播放相應的球動畫
+                    if (selectedResult.animation) {
+                        elements.gameBall.className = 'game-ball ' + selectedResult.animation;
+                    } else {
+                        // 三振情況 - 球停在捕手位置
+                        if (elements.gameBall.style) {
+                            elements.gameBall.style.opacity = '1';
+                        }
+                    }
+                    
+                    // 顯示結果
+                    safeSetContent(elements.result, selectedResult.text);
+                    elements.result.className = selectedResult.type === 'out' ? 'result miss' : 'result';
+                    
+                    // 更新按鈕狀態
+                    elements.swingBtn.textContent = '比賽結束';
+                    
+                    // 顯示最終結果和歷史意義
+                    setTimeout(function() {
+                        let endMessage;
+                        if (selectedResult.type === 'hit') {
+                            endMessage = `
+                                <div style="font-size: 1.3em; color: #008B00; margin-bottom: 15px;">
+                                    🎉 精彩安打！雖然比分仍落後，但展現了不屈精神！
+                                </div>
+                                <div style="font-size: 1em; color: #654321; line-height: 1.5;">
+                                    嘉農在甲子園留下了永恆的印記！<br>
+                                    <strong>這就是台灣棒球的精神！</strong>
+                                </div>
+                            `;
+                        } else {
+                            endMessage = `
+                                <div style="font-size: 1.3em; color: #8B0000; margin-bottom: 15px;">
+                                    🏁 比賽結束！中京商業 4:0 獲勝
+                                </div>
+                                <div style="font-size: 1em; color: #654321; line-height: 1.5;">
+                                    雖敗猶榮！嘉農創造了台灣棒球史上最光榮的一戰！<br>
+                                    <strong>他們的精神將永遠激勵著後代！</strong>
+                                </div>
+                            `;
+                        }
+                        safeSetContent(elements.result, endMessage);
+                        
+                        // 顯示歷史統計資訊
+                        if (elements.gameStats) {
+                            elements.gameStats.style.display = 'block';
+                            const statsMessage = `
+                                <div style="text-align: center; color: #8B4513; font-weight: bold; line-height: 1.6;">
+                                    <h3 style="margin-bottom: 10px; color: #8B0000;">📜 歷史時刻</h3>
+                                    <p><strong>1931年夏季甲子園決賽</strong></p>
+                                    <p>台灣嘉義農林學校 vs 日本中京商業</p>
+                                    <p>${selectedResult.type === 'hit' ? '展現了台灣棒球的實力與精神' : '雖然以0:4敗北，但創造了台灣棒球傳奇'}</p>
+                                    <p style="margin-top: 10px; font-style: italic; color: #CD853F;">
+                                        "不為輸贏，只為榮耀！"
+                                    </p>
+                                </div>
+                            `;
+                            safeSetContent(elements.gameStats, statsMessage);
+                        }
+                    }, 2500);
+                    
+                }, 800);
+                
+                // 動畫重置處理
+                setTimeout(function() {
+                    safeRemoveClass(elements.pitcher, 'throwing');
+                    safeRemoveClass(elements.batter, 'swinging');
+                    
+                    // 處理三振情況下的球狀態
+                    if (!selectedResult.animation && elements.gameBall) {
+                        elements.gameBall.className = 'game-ball';
+                        if (elements.gameBall.style) {
+                            elements.gameBall.style.opacity = '0';
+                        }
+                    }
+                }, 4000);
+                
+                return true;
+            }
+
+            // 重置遊戲功能（隱藏功能）
+            function resetGame() {
+                if (!gameEnded) return;
+                
+                gameEnded = false;
+                gameStarted = false;
+                
+                const elements = {
+                    result: safeGetElement('result'),
+                    swingBtn: safeGetElement('swingBtn'),
+                    gameStats: safeGetElement('gameStats'),
+                    gameBall: safeGetElement('gameBall')
+                };
+                
+                // 重置界面
+                if (elements.result) {
+                    const initialMessage = `
+                        <div style="color: #8B0000; font-weight: bold;">
+                            九局上半，兩出局，滿壘...
+                        </div>
+                        <div style="color: #654321; font-size: 1.2em; margin-top: 10px;">
+                            這是關鍵的一球！
+                        </div>
+                    `;
+                    safeSetContent(elements.result, initialMessage);
+                    elements.result.className = 'result';
+                }
+                
+                if (elements.swingBtn) {
+                    elements.swingBtn.disabled = false;
+                    elements.swingBtn.style.opacity = '1';
+                    elements.swingBtn.textContent = '🏏 揮棒打擊';
+                }
+                
+                if (elements.gameStats) {
+                    elements.gameStats.style.display = 'none';
+                }
+                
+                if (elements.gameBall) {
+                    elements.gameBall.className = 'game-ball';
+                    elements.gameBall.style.opacity = '0';
+                }
+            }
+
+            // 將主要函式綁定到全域，供HTML呼叫
+            window.finalSwing = finalSwing;
+            window.resetGame = resetGame; // 隱藏重置功能
+
+            // 鍵盤事件處理
+            document.addEventListener('keydown', function(event) {
+                if (event && event.code === 'Space' && !gameEnded) {
+                    try {
+                        event.preventDefault();
+                        finalSwing();
+                    } catch (e) {
+                        console.warn('鍵盤事件處理失敗');
+                    }
+                } else if (event && event.code === 'KeyR' && gameEnded) {
+                    // 隱藏重置功能 - 按R鍵重置遊戲
+                    try {
+                        event.preventDefault();
+                        resetGame();
+                    } catch (e) {
+                        console.warn('重置功能失敗');
+                    }
+                }
+            });
+
+            // 頁面載入完成後的初始化
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    console.log('🎮 1931年嘉農甲子園遊戲已載入完成');
+                    console.log('⚾ 按空白鍵開始遊戲，遊戲結束後按R鍵可重置');
+                });
+            } else {
+                console.log('🎮 1931年嘉農甲子園遊戲已準備就緒');
+            }
+
+            // 錯誤處理和效能監控
+            window.addEventListener('error', function(e) {
+                console.error('遊戲運行錯誤:', e.error);
+            });
+
+        })();
+    </script>
+</body>
+</html>
